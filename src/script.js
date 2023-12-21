@@ -1,6 +1,87 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
+// import imageSource from './color.jpg'
+// console.log(imageSource)
+
+const image = new Image()
+// const texture = new THREE.Texture(image)
+
+// texture.colorSpace = THREE.SRGBColorSpace
+
+/**
+ * Textures
+*/
+
+
+const loadingManager = new THREE.LoadingManager()
+
+loadingManager.onStart = () => {
+    console.log('onStart')
+}
+
+loadingManager.onLoaded = () => {
+    console.log('onLoaded')
+}
+
+loadingManager.onProgress = () => {
+    console.log('onProgress')
+}
+
+loadingManager.onError = () => {
+    console.log('onError')
+}
+
+
+const textureLoader = new THREE.TextureLoader(loadingManager)
+// const texture = textureLoader.load(
+//         '/textures/door/color.jpg',
+//         ()=> {
+//             console.log('load')
+//         },
+//         ()=> {
+//             console.log('progress')
+            
+//         },
+//         ()=> {
+//             console.log('error')
+
+//         },
+//     )
+
+    const colorTexture = textureLoader.load('/textures/door/color.jpg')
+    const alphaTexture = textureLoader.load('/textures/door/alpha.jpg')
+    const heightTexture = textureLoader.load('/textures/door/height.jpg')
+    const normalTexture = textureLoader.load('/textures/door/normal.jpg')
+    const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
+    const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
+    const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
+
+
+colorTexture.colorSpace = THREE.SRGBColorSpace
+alphaTexture.colorSpace = THREE.SRGBColorSpace
+heightTexture.colorSpace = THREE.SRGBColorSpace
+normalTexture.colorSpace = THREE.SRGBColorSpace
+ambientOcclusionTexture.colorSpace = THREE.SRGBColorSpace
+metalnessTexture.colorSpace = THREE.SRGBColorSpace
+roughnessTexture.colorSpace = THREE.SRGBColorSpace
+
+
+// image.onload = () => {
+//     console.log(texture)
+//     texture.needsUpdate = true
+// }
+
+// image.src = '/textures/door/color.jpg'
+
+// image.onload = () => {
+//     console.log('image loaded')
+
+//     const texture = new THREE.Texture(image)
+//     console.log(texture)
+// }
+
+
 /**
  * Base
  */
@@ -13,8 +94,12 @@ const scene = new THREE.Scene()
 /**
  * Object
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+const geometry = new THREE.TorusGeometry(1, .35, 32, 100)
+// const geometry = new THREE.ConeGeometry(1, 32, 32)
+// const geometry = new THREE.SphereGeometry(1, 32, 32)
+// const geometry = new THREE.BoxGeometry(1, 1, 1)
+console.log(geometry.attributes.uv)
+const material = new THREE.MeshBasicMaterial({ map: ambientOcclusionTexture })
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
